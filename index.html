@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Love Surprise</title>
+    <!-- Google Fonts for Burmese Typography & Handwritten Aesthetics -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Padauk:wght@400;700&family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pyidaungsu', 'Padauk', sans-serif;
+        }
+
+        /* Vibrant Colorful Animated Gradient Background */
+        body {
+            background: linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 440px;
+            min-height: 520px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Translucent Glassmorphism Card Style */
+        .interactive-card {
+            background: rgba(255, 255, 255, 0.75);
+            padding: 35px 25px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.6);
+            text-align: center;
+            width: 100%;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.4s ease;
+        }
+
+        .step {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .step.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        img.gif-box {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 22px;
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.9);
+        }
+
+        h2 {
+            color: #be123c;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            min-height: 90px;
+            position: relative;
+            padding: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 28px;
+            min-height: 52px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, background 0.25s ease;
+            letter-spacing: 0.5px;
+            user-select: none;
+            touch-action: manipulation;
+            min-width: 110px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 65, 108, 0.7);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.45);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(106, 17, 203, 0.65);
+        }
+
+        /* Falling Swaying GIF Container */
+        .falling-envelope-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 20px;
+            user-select: none;
+            animation: fallAndSway 3.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatGentle 2.6s ease-in-out infinite 3.2s;
+        }
+
+        @keyframes fallAndSway {
+            0% {
+                transform: translateY(-280px) rotate(-18deg);
+                opacity: 0;
+            }
+            30% {
+                transform: translateY(-120px) rotate(14deg);
+                opacity: 1;
+            }
+            60% {
+                transform: translateY(20px) rotate(-10deg);
+            }
+            85% {
+                transform: translateY(-8px) rotate(6deg);
+            }
+            100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes floatGentle {
+            0%, 100% {
+                transform: translateY(0px) rotate(-4deg);
+            }
+            50% {
+                transform: translateY(-14px) rotate(4deg);
+            }
+        }
+
+        .no-frame-gif {
+            width: 210px;
+            height: auto;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.22));
+            transition: transform 0.3s ease;
+        }
+
+        .falling-envelope-container:hover .no-frame-gif {
+            transform: scale(1.08);
+        }
+
+        .tap-hint-badge {
+            margin-top: 18px;
+            background: rgba(255, 255, 255, 0.88);
+            color: #be123c;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 8px 20px;
+            border-radius: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            animation: pulseHint 1.6s infinite ease-in-out;
+        }
+
+        @keyframes pulseHint {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.06); opacity: 1; }
+        }
+
+        /* Paper Letter Pop-in Animation */
+        .paper-letter-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .paper-letter-pop {
+            animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popInLetter {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-12deg);
+            }
+            70% {
+                transform: scale(1.04) rotate(-2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(-2deg);
+            }
+        }
+
+        .paper-sheet {
+            position: relative;
+            background-color: rgba(255, 253, 248, 0.96);
+            backdrop-filter: blur(10px);
+            background-image: 
+                radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0),
+                linear-gradient(to right, rgba(0,0,0,0.01) 1px, transparent 1px);
+            background-size: 12px 12px, 100% 100%;
+            width: 100%;
+            padding: 32px 22px 28px 22px;
+            border-radius: 16px;
+            box-shadow: 
+                -8px 15px 35px rgba(0, 0, 0, 0.2),
+                0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .paperclip {
+            position: absolute;
+            top: 12px;
+            right: 28px;
+            width: 18px;
+            height: 45px;
+            border: 3px solid #4a4a4a;
+            border-radius: 12px;
+            z-index: 6;
+            transform: rotate(8deg);
+            box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
+            background: transparent;
+        }
+
+        .paperclip::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 2px;
+            width: 8px;
+            height: 28px;
+            border: 2px solid #5a5a5a;
+            border-radius: 8px;
+        }
+
+        .letter-content {
+            font-family: 'Pyidaungsu', sans-serif;
+            color: #2b2b2b;
+            line-height: 1.8;
+            font-size: 0.98rem;
+            text-align: center;
+        }
+
+        .letter-title {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #b91c1c;
+            font-weight: 700;
+            margin-bottom: 14px;
+            border-bottom: 2px dashed #fca5a5;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        
+        <!-- STEP 1 -->
+        <div class="interactive-card step active" id="step-1">
+            <img class="gif-box" src="https://media.tenor.com/2Jl1X7xa6UYAAAAi/bubu-dudu-eyes.gif" alt="Cute Gif 1">
+            <h2>ကိုယ့်ကိုမကြိုက်တဲ့လူကိုမှ<br>ချစ်မိတဲ့ လူတစ်ယောက်ရဲ့<br>နှလုံးသားကိုတရားစွဲချင်ပါသလား???</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep(2, 'စွဲမယ်', 'Step 1')">စွဲမယ်</button>
+                <button class="btn-secondary" onclick="nextStep(2, 'Yes', 'Step 1')">Yes</button>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="interactive-card step" id="step-2">
+            <img class="gif-box" src="https://media.tenor.com/D6HDHJLAqb4AAAAi/dudu-bubu-dudu.gif" alt="Cute Gif 2">
+            <h2>နင့်ကို ကြိုက်တာက ငါ့အရသာပဲ။<br>နင်ပြန်မကြိုက်တာက နင့်အရသာပေါ့။<br>လူတိုင်းရဲ့ Taste မတူနိုင်ဘူးလေ<br>ဟုတ်တယ်မလား</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep(3, 'ဟုတ်တယ်', 'Step 2')">ဟုတ်တယ်</button>
+                <button class="btn-secondary" onclick="nextStep(3, 'Yes', 'Step 2')">Yes</button>
+            </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="interactive-card step" id="step-3">
+            <img class="gif-box" src="https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif" alt="Cute Gif 3">
+            <h2>ဒါပေမဲ့ ငါ့ကို<br>ကြိုက်လာရင်တော့<br>အရင်ပြောပါနော်။</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep(4, 'လာပြောမယ်', 'Step 3')">လာပြောမယ်</button>
+                <button class="btn-secondary" onclick="nextStep(4, 'Yes', 'Step 3')">Yes</button>
+            </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="interactive-card step" id="step-4">
+            <img class="gif-box" src="https://media.tenor.com/2Jl1X7xa6UYAAAAi/bubu-dudu-eyes.gif" alt="Cute Gif 4">
+            <h2>ငါ့ကို ချစ်စရာကောင်းတယ်လို့<br>တစ်ခါလောက်တော့ ပြောပေးပါလား<br>ငါ့ Self-esteem အတွက်ပါ</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep(5, 'လှတယ်', 'Step 4')">လှတယ်</button>
+                <button class="btn-secondary" onclick="nextStep(5, 'You’re so pretty', 'Step 4')">You’re so pretty</button>
+            </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="interactive-card step" id="step-5">
+            <img class="gif-box" src="https://media.tenor.com/D6HDHJLAqb4AAAAi/dudu-bubu-dudu.gif" alt="Cute Gif 5">
+            <h2>တစ်ယောက်ယောက်က<br>ကို့ကိုယ်ချစ်စရာကောင်းတယ်နော်လို့<br>ပြောရင် ရင်ခုန်ဖူးလား??❤️</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep(6, 'ခုန်တယ်', 'Step 5')">ခုန်တယ်</button>
+                <button class="btn-secondary" onclick="nextStep(6, 'Yes', 'Step 5')">Yes</button>
+            </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="interactive-card step" id="step-6">
+            <img class="gif-box" src="https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif" alt="Cute Gif 6">
+            <h2>လူတစ်ယောက်ရဲ့ အိပ်မက်ထဲအထိ<br>ဝင်ရောက်နှောင့်ယှက်နိုင်တဲ့အထိ<br>ချစ်စရာကောင်းတယ်လို့<br>ကိုယ့်ကိုယ်ကို ထင်လား။</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep('falling', 'ထင်တယ်', 'Step 6')">ထင်တယ်</button>
+                <button class="btn-secondary" onclick="nextStep('falling', 'Yes', 'Step 6')">Yes</button>
+            </div>
+        </div>
+
+        <!-- FALLING GIF STEP -->
+        <div class="step" id="step-falling" style="width: 100%;">
+            <div class="falling-envelope-container" onclick="openLetter()">
+                <!-- Frame-less Transparent Envelope GIF -->
+                <img class="no-frame-gif" src="https://i.ibb.co/JWycnnh9/pngegg.png" alt="Falling Envelope GIF">
+                <div class="tap-hint-badge">✉️ ePostcard For You ✨</div>
+            </div>
+        </div>
+
+        <!-- STEP 7 (Final Note) -->
+        <div class="step" id="step-7" style="width: 100%;">
+            <div class="paper-letter-wrapper paper-letter-pop">
+                <div class="paper-sheet">
+                    <div class="paperclip"></div>
+
+                    <div class="letter-content">
+                        <div class="letter-title">🌷 For You 🌷</div>
+                        <p>don’t forget to smile! 😊</p>
+                        <br>
+                        <p>You might not know it,<br>but your smile can make someone’s day<br>a little brighter. 🌷</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Formspree သို့ Data ပို့ပေးမည့် API Function (YOUR_FORM_ID နေရာတွင် သင်၏ Formspree Endpoint ထည့်ပါ)
+        function sendToFormspree(clickedButton, stepName) {
+            fetch("https://formspree.io/f/xaeqzole", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    Step: stepName,
+                    ClickedButton: clickedButton,
+                    Timestamp: new Date().toLocaleString()
+                })
+            }).catch(error => console.log("Error sending data to Formspree:", error));
+        }
+
+        // Navigate between Steps & Send Formspree Notifications
+        function nextStep(stepTarget, clickedButtonText, stepName) {
+            // နှိပ်လိုက်သည့် ခလုတ်၏ အမည်ကို Formspree မှတစ်ဆင့် Gmail သို့ ပို့ပေးပါမည်
+            sendToFormspree(clickedButtonText, stepName);
+
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            const targetElement = document.getElementById(`step-${stepTarget}`);
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+        }
+
+        // Envelope နှိပ်ပြီးနောက် Final Message ပေါ်လာရန်
+        function openLetter() {
+            sendToFormspree("Opened Letter Envelope", "Final Message");
+            nextStep(7, "Opened Letter", "Final Message Step");
+        }
+    </script>
+</body>
+</html>
